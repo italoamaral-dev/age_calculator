@@ -67,7 +67,7 @@ button:active{
   color: hsl(0, 100%, 66%);
   font-size: 12px;
   margin-top: 5px;
-  display: none; /* Initially hidden */
+  display: none; 
 }
 
 .outputs{
