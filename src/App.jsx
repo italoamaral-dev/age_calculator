@@ -1,55 +1,78 @@
-import './App.css';
-import React from 'react';
+import { useState } from 'react'
+import './App.css'
+
 
 function App() {
+
+  const [inputs, setInputs] = useState({
+    day: "",
+    month: "",
+    year: "",
+  });
+
+  const[outputs, setOutputs] = useState({
+    years: '- -',
+    months: '- -',
+    days: '- -',
+  });
+
+  function calculateData() {
+    const years = 38;
+    const months = 3;
+    const days = 26;
+
+    setOutputs({ years, months, days });
+  }
+
+  function validateInputs(){
+    
+  }
   
   return (
-    <>
+    <div className="app">
 
       <section className="formulario">
-        <form>
-          
+        <form id="data-form" onSubmit={(e) => e.preventDefault()}>
+
           <div className="input-group">
             <label for="day">DAY</label>
-            <input type="number" id="day" placeholder="DD"/>
+            <input type="number" id="day" placeholder="DD" value={inputs.day}
+              onChange={(e) => setInputs({ ...inputs, day: e.target.value })}/>
             <span className="error-message" id="day-error">Must be a valid day</span>
           </div>
 
           <div className="input-group">
             <label for="month">MONTH</label>
-            <input type="number" id="month" placeholder="MM"/>
+            <input type="number" id="month" placeholder="MM" value={inputs.month}
+              onChange={(e) => setInputs({ ...inputs, month: e.target.value })}/>
             <span className="error-message" id="day-error">Must be a valid month</span>
           </div>
 
           <div className="input-group">
             <label for="year">YEAR</label>
-            <input type="number" id="year" placeholder="YYYY"/>
+            <input type="number" id="year" placeholder="YYYY" value={inputs.year}
+              onChange={(e) => setInputs({ ...inputs, year: e.target.value })}/>
             <span className="error-message" id="day-error">Must be in the past</span>
           </div>
 
-          <button className="button"></button>
         </form>
       </section>
 
-      <section className="outputs">
-        <div className="output-year">years</div>
-        <div className="output-month">months</div>
-        <div className="output-day">days</div>
-      </section>
+      <div className='linha'>
+        <hr></hr>
+        <div className='bola'>
+          <button type="button" onClick ={calculateData}></button>
+          <img src="./image.png"></img>
+        </div>
+      </div>
 
-      <section className="show-dates">
-        <div className="show-year">--</div>
-        <div className="show-month">--</div>
-        <div className="show-day">--</div>
-      </section>
+      <div id='data'>
+        <p><span className='outputs'>{outputs.years}</span> years</p>
+        <p><span className='outputs'>{outputs.months}</span> months</p>
+        <p><span className='outputs'>{outputs.days}</span> days</p>
+      </div>
 
-      <section className="icon">
-        <img src="./images/icon-arrow.svg" id="image" alt="icon" />
-      </section>
-
-      <div id="back-icon"></div>
-
-    </>
+    </div>
   )
 }
 
