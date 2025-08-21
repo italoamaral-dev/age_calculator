@@ -15,6 +15,12 @@ function App() {
     days: '- -',
   });
 
+  const [errors, setErros] = useState({
+    day: "",
+    month:"",
+    year: ""
+  });
+
   function calculateData() {
     if (!validateInputs()) return; 
 
@@ -25,14 +31,11 @@ function App() {
     let months = today.getMonth() - birthDate.getMonth();
     let days = today.getDate() - birthDate.getDate();
 
-   
     if (days < 0) {
       months -= 1;
       const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
       days += prevMonth.getDate();
     }
-
-    
     if (months < 0) {
       years -= 1;
       months += 12;
@@ -40,29 +43,45 @@ function App() {
 
     setOutputs({ years, months, days });
   }
-  
+
   function validateInputs() {
     const { day, month, year } = inputs;
     const today = new Date();
-    if (!day || !month || !year) {
-      alert("Fill in all fields");
-      return false;
+
+    let newErros = {day: "", month: "", year: ""};
+    let valid = true;
+
+    if (!day) {
+      newErros.day = 'This field is required';
+      valid = false;
     }
-    if (month < 1 || month > 12) {
-      alert("Must be a valid month");
-      return false;
+    if (!month) {
+      newErros.month = 'This field is required';
+      valid = false;
     }
-    const maxDays = new Date(year, month, 0).getDate();
-    if (day < 1 || day > maxDays) {
-      alert("Must be a valid day");
-      return false;
+    if (!year) {
+     newErros.year = 'This field is required';
+      valid = false;
     }
-    const inputDate = new Date(year, month - 1, day);
-    if (inputDate > today) {
-      alert("Must be in the past");
-      return false;
+    if (month && (month < 1 || month > 12)) {
+      newErros.month = "Must be a valid month";
+      valid = false;
     }
-    return true;
+    if (day && month && year){
+      const maxDays = new Date(year, month, 0).getDate();
+      if (day < 1 || day > maxDays){
+        newErros.day = "Must be a valid day";
+        valid = false;
+      }
+      const inputDate = new Date (year, month - 1, day);
+      if (inputDate > today) {
+        newErros.year = "Must be in the past";
+        valid = false;
+      }
+    }
+
+    setErros(newErros);
+    return valid;
   }
 
   return (
@@ -72,24 +91,27 @@ function App() {
         <form id="data-form" onSubmit={(e) => e.preventDefault()}>
 
           <div className="input-group">
-            <label htmlFor="day">DAY</label>
+            <label htmlFor="day" className={errors.day ? "error" : ""}>DAY</label>
             <input type="number" id="day" placeholder="DD" value={inputs.day}
-              onChange={(e) => setInputs({ ...inputs, day: e.target.value })} />
-            <span className="error-message" id="day-error">Must be a valid day</span>
+              onChange={(e) => setInputs({ ...inputs, day: e.target.value })}
+              className={errors.day ? "error" : ""} />
+            <div className="error">{errors.day}</div>
           </div>
 
           <div className="input-group">
-            <label htmlFor="month">MONTH</label>
+            <label htmlFor="month" className={errors.month ? "error" : ""}>MONTH</label>
             <input type="number" id="month" placeholder="MM" value={inputs.month}
-              onChange={(e) => setInputs({ ...inputs, month: e.target.value })} />
-            <span className="error-message" id="month-error">Must be a valid month</span>
+              onChange={(e) => setInputs({ ...inputs, month: e.target.value })}
+              className={errors.month ? "error" : ""}/>
+            <div className="error">{errors.month}</div>
           </div>
 
           <div className="input-group">
-            <label htmlFor="year">YEAR</label>
+            <label htmlFor="year" className={errors.year ? "error" : ""}>YEAR</label>
             <input type="number" id="year" placeholder="YYYY" value={inputs.year}
-              onChange={(e) => setInputs({ ...inputs, year: e.target.value })} />
-            <span className="error-message" id="year-error">Must be in the past</span>
+              onChange={(e) => setInputs({ ...inputs, year: e.target.value })}
+              className={errors.year ? "error" : ""} />
+            <div className= "error">{errors.year}</div>
           </div>
 
         </form>
@@ -98,8 +120,7 @@ function App() {
       <div className='linha'>
         <hr></hr>
         <div className='bola'>
-          <button type="button" onClick={calculateData}></button>
-          <img src="images/icon-arrow.svg" alt="arrow" />
+          <button type="button" onClick={calculateData}><img src="icon-arrow.svg" alt="arrow"/></button>
         </div>
       </div>
 
