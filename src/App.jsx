@@ -16,7 +16,7 @@ function App() {
   });
 
   function calculateData() {
-    if (!validateInputs()) return; // só calcula se for válido
+    if (!validateInputs()) return; 
 
     const today = new Date();
     const birthDate = new Date(inputs.year, inputs.month - 1, inputs.day);
