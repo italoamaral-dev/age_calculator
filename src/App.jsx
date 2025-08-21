@@ -120,7 +120,8 @@ function App() {
       <div className='linha'>
         <hr></hr>
         <div className='bola'>
-          <button type="button" onClick={calculateData}><img src="icon-arrow.svg" alt="arrow"/></button>
+          <button type="button" onClick={calculateData}>
+            <img src="images/icon-arrow.svg" alt="arrow"/></button>
         </div>
       </div>
 
